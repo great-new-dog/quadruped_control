@@ -43,13 +43,37 @@ def fk(theta_1, theta_2, theta_3, leg):
     pf_tmp2 = np.array([0, epslon*Config.hip_len, 0]).transpose() + \
         rotY(theta_2) @ pf_tmp1
         
-    # pf = np.array([delta*Config.body_len_x, epslon*Config.body_len_y, 0]) + \
-    #     rotX(theta_1) @ pf_tmp2
     pf = rotX(theta_1) @ pf_tmp2
     
     return pf
 
-
+def jocobian(theta_1, theta_2, theta_3, leg):
+    if leg%2==0:
+        epslon = -1
+    else:
+        epslon = 1
+    
+    l1 = epslon * Config.hip_len
+    l2 = -Config.thigh_len
+    l3 = -Config.shank_len
+    
+    j11 = 0
+    j12 = l2*math.cos(theta_2)+l3*math.cos(theta_2+theta_3)
+    j13 = l3*math.cos(theta_2+theta_3)
+    j21 = -l1*math.sin(theta_1)-l2*math.cos(theta_1)*math.cos(theta_2) - l3*math.cos(theta_1)*math.cos(theta_2+theta_3)
+    j22 = l2*math.sin(theta_1)*math.sin(theta_2)+l3*math.sin(theta_1)*math.sin(theta_2+theta_3)
+    j23 = l3*math.sin(theta_1)*math.sin(theta_2+theta_3)
+    j31 = l1*math.cos(theta_1)-l2*math.sin(theta_1)*math.cos(theta_2) - l3*math.sin(theta_1)*math.cos(theta_2+theta_3)
+    j32 = -l2*math.cos(theta_1)*math.sin(theta_2)-l3*math.cos(theta_1)*math.sin(theta_2+theta_3)
+    j33 = -l3*math.cos(theta_1)*math.sin(theta_2+theta_3)
+    
+    return np.array(
+        [[j11, j12, j13],
+         [j21, j22, j23],
+         [j31, j32, j33]
+        ]
+    )
+    
 def main():
     theta_1 = 0.0
     theta_2 = 0.0

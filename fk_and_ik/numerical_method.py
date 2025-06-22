@@ -9,19 +9,19 @@ def jocobian(theta_1, theta_2, theta_3, leg):
     else:
         epslon = 1
     
-    l1 = Config.hip_len
-    l2 = Config.thigh_len
-    l3 = Config.shank_len
+    l1 = epslon * Config.hip_len
+    l2 = -Config.thigh_len
+    l3 = -Config.shank_len
     
     j11 = 0
-    j12 = -l2*math.cos(theta_2)-l3*math.cos(theta_2+theta_3)
-    j13 = -l3*math.cos(theta_2+theta_3)
-    j21 = -epslon*l1*math.sin(theta_1)+l2*math.cos(theta_1)*math.cos(theta_2) + l3*math.cos(theta_1)*math.cos(theta_2+theta_3)
-    j22 = -l2*math.sin(theta_1)*math.sin(theta_2)-l3*math.sin(theta_1)*math.sin(theta_2+theta_3)
-    j23 = -l3*math.sin(theta_1)*math.sin(theta_2+theta_3)
-    j31 = epslon*l1*math.cos(theta_1)+l2*math.sin(theta_1)*math.cos(theta_2) + l3*math.sin(theta_1)*math.cos(theta_2+theta_3)
-    j32 = l2*math.cos(theta_1)*math.sin(theta_2)+l3*math.cos(theta_1)*math.sin(theta_2+theta_3)
-    j33 = l3*math.cos(theta_1)*math.sin(theta_2+theta_3)
+    j12 = l2*math.cos(theta_2)+l3*math.cos(theta_2+theta_3)
+    j13 = l3*math.cos(theta_2+theta_3)
+    j21 = -l1*math.sin(theta_1)-l2*math.cos(theta_1)*math.cos(theta_2) - l3*math.cos(theta_1)*math.cos(theta_2+theta_3)
+    j22 = l2*math.sin(theta_1)*math.sin(theta_2)+l3*math.sin(theta_1)*math.sin(theta_2+theta_3)
+    j23 = l3*math.sin(theta_1)*math.sin(theta_2+theta_3)
+    j31 = l1*math.cos(theta_1)-l2*math.sin(theta_1)*math.cos(theta_2) - l3*math.sin(theta_1)*math.cos(theta_2+theta_3)
+    j32 = -l2*math.cos(theta_1)*math.sin(theta_2)-l3*math.cos(theta_1)*math.sin(theta_2+theta_3)
+    j33 = -l3*math.cos(theta_1)*math.sin(theta_2+theta_3)
     
     return np.array(
         [[j11, j12, j13],
